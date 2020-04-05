@@ -26,7 +26,7 @@ public abstract class AbstractBasePage {
     }
 
     /**
-     *Specific 
+     *Specific
      * @param component
      */
 
