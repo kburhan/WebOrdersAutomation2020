@@ -8,7 +8,7 @@ public class ConfigurationReader {
     static {
         try {
             //location of properties file
-            String path = System.getProperty("user.dir")+"/configuration.properties";
+            String path = System.getProperty("user.dir")+"/configurations.properties";
             //get that file as a stream
             FileInputStream input = new FileInputStream(path);
             //create object of Properties class
