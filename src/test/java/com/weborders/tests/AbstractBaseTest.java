@@ -13,6 +13,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 
+import java.io.IOException;
+
 public abstract class AbstractBaseTest {
     protected WebDriver driver = Driver.getDriver();
 
@@ -22,8 +24,19 @@ public abstract class AbstractBaseTest {
 
     @BeforeTest
     public void beforeTest(){
+        extentReports = new ExtentReports();
+        String reportPath = "";
 
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            reportPath = System.getProperty("user.dir") + "\\test-output\\report.html";
+        } else {
+            reportPath = System.getProperty("user.dir") + "/test-output/report.html";
+        }
+        extentHtmlReporter = new ExtentHtmlReporter(reportPath);
+        extentReports.attachReporter(extentHtmlReporter);
+        extentHtmlReporter.config().setReportName("WebOrders Automation");
     }
+
     @AfterTest
     public void afterTest(){
 
@@ -38,6 +51,18 @@ public abstract class AbstractBaseTest {
     public void teardown(ITestResult testResult){
         if(testResult.getStatus()==ITestResult.FAILURE) {
             String screenshotLocation = BrowserUtilities.getScreenshot(testResult.getName());
+            try {
+                extentTest.fail(testResult.getName());
+                extentTest.addScreenCaptureFromPath(screenshotLocation);
+                extentTest.fail(testResult.getThrowable());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to attach screenshot");
+            }
+        }else if(testResult.getStatus()==ITestResult.SUCCESS) {
+            extentTest.pass((testResult.getName()));
+        }else if(testResult.getStatus()==ITestResult.SKIP){
+            extentTest.skip(testResult.getName());
 
         }
         BrowserUtilities.wait(3);
