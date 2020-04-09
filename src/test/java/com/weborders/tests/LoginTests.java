@@ -9,7 +9,7 @@ public class LoginTests extends AbstractBaseTest {
 
     @Test
     public void login(){
-        extentTest = extentReports.createTest("verify page logo");
+        extentTest = extentReports.createTest("Verify page logo");
 
         LoginPage loginPage = new LoginPage();
         loginPage.login();

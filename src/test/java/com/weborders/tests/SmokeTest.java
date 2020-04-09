@@ -1,10 +1,12 @@
 package com.weborders.tests;
 
 import com.weborders.pages.LoginPage;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
 import static org.testng.Assert.*;
 
+import com.weborders.utilities.BrowserUtilities;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public class SmokeTest extends AbstractBaseTest {
 
@@ -15,12 +17,13 @@ public class SmokeTest extends AbstractBaseTest {
         LoginPage loginPage = new LoginPage();
         loginPage.login();
         loginPage.navigateTo(component);
+        BrowserUtilities.wait(2);
         assertEquals(loginPage.getPageSubtitleText(), expectedPageSubTitle);
 
         extentTest.pass(component + " verified!");
     }
 
-    @DataProvider
+    @DataProvider(parallel = false) // to execute all tests in parallel
     public Object[][] smokeTestData() {
         return new Object[][]{
                 {"View all orders", "List of All Orders"},

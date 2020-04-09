@@ -13,13 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class BrowserUtilities {
-    /**
-     * Pause test for some time
-     *
-     * @param seconds
-     */
+
     public static void wait(int seconds) {
         try {
             Thread.sleep(1000 * seconds);
@@ -28,10 +25,6 @@ public class BrowserUtilities {
         }
     }
 
-    /**
-     * @param elements represents collection of WebElements
-     * @return collection of strings
-     */
     public static List<String> getTextFromWebElements(List<WebElement> elements) {
         List<String> textValues = new ArrayList<>();
         for (WebElement element : elements) {
@@ -42,11 +35,6 @@ public class BrowserUtilities {
         return textValues;
     }
 
-    /**
-     * waits for backgrounds processes on the browser to complete
-     *
-     * @param timeOutInSeconds
-     */
     public static void waitForPageToLoad(long timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = driver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         try {
@@ -57,29 +45,15 @@ public class BrowserUtilities {
         }
     }
 
-    /**
-     * Clicks on an element using JavaScript
-     *
-     * @param element
-     */
     public static void clickWithJS(WebElement element) {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", element);
     }
 
-    /**
-     * Scroll to element using JavaScript
-     *
-     * @param element
-     */
     public static void scrollTo(WebElement element) {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-    /**
-     * @param name screenshot name
-     * @return path to the screenshot
-     */
     public static String getScreenshot(String name) {
         //adding date and time to screenshot name, to make screenshot unique
         name = new Date().toString().replace(" ", "_").replace(":", "-") + "_" + name;
@@ -109,5 +83,15 @@ public class BrowserUtilities {
             e.printStackTrace();
         }
         return path;
+    }
+
+    public static void scitchWindow(String title){
+        Set<String> windowHandles = Driver.getDriver().getWindowHandles();
+        for(String window : windowHandles){
+            Driver.getDriver().switchTo().window(window);
+            if(Driver.getDriver().getTitle().equals(title)){
+                break;
+            }
+        }
     }
 }
